@@ -1,2 +1,2 @@
-# bot-model
+# Bot Model 
 Model of Twitter Bot functions. 
