@@ -1,4 +1,4 @@
-from bot_actions import *
+from bot.bot_actions import *
 import configparser
 
 
@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     # access tokens from developer.twitter.com
     tokens = {
-        "bot_name": "Bot Model Test 01",
+        "bot_name": "Bot Model Test 02",
         "bearer_token": config['DEFAULT']['bearer_token'],
         "access_token": config['DEFAULT']['access_token'],
         "access_token_secret": config['DEFAULT']['access_token_secret'],
@@ -19,12 +19,16 @@ if __name__ == '__main__':
         "api_secret_key": config['DEFAULT']['api_secret_key']
     }
 
-    # bot standard instance
-    bot = BotModel(tokens)
+    # actions standard instance
+    bot = BotActions(tokens)
 
-    # currently working actions of the bot model
-    # bot.tweet("hello again :D")
-    # bot.follow(1159210901825904640)
-    # bot.unfollow('joaoluizpedrosa')
-    # bot.reply('bot: reply test', 1391920122265231364)
-    # bot.retweet(1389325211603017729)
+    # currently working actions of the actions model
+    # actions.tweet("hello again :D")
+    # actions.follow(1159210901825904640)
+    # actions.unfollow('joaoluizpedrosa')
+    # actions.reply('actions: reply test', 1391920122265231364)
+    # actions.retweet(1389325211603017729)
+
+    # dm examples
+    user_to_respond, message_data = bot.dm.latest_recived_dm()
+    # actions.dm.send_dm(user_to_respond)

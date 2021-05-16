@@ -2,7 +2,7 @@
 author: Bárbara Boechat
 date: 29/04/2021
 
-Main Bot Actions Log Generator of its actions
+Main Bot Actions Log Generator
 """
 
 
