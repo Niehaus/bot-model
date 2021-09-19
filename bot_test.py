@@ -1,7 +1,7 @@
 import configparser
 
 from bot.bot_actions import *
-from bot.db_handler import DbConnection, TwitterItem
+from bot.db_handler import LogHandler
 
 if __name__ == '__main__':
     # temporary config getter will be replaced by gitsecrets
@@ -9,9 +9,14 @@ if __name__ == '__main__':
     config.sections()
     config.read('config.cfg')
 
-    # access tokens from developer.twitter.com
+    # access tokens from developer.twitter.com and MongoDb password
+    connection_pass = config['DEFAULT']['mongo_password']
+    bot_tag = config['DEFAULT']['bot_tag']
+
     tokens = {
-        "bot_name": "Bot Model Test 02",
+        "bot_name": "Automation Teste 02",
+        "tag": bot_tag,
+        "connection_pass": connection_pass,
         "bearer_token": config['DEFAULT']['bearer_token'],
         "access_token": config['DEFAULT']['access_token'],
         "access_token_secret": config['DEFAULT']['access_token_secret'],
@@ -20,19 +25,23 @@ if __name__ == '__main__':
     }
 
     # actions standard instance
-    bot = BotActions(tokens)
+    logger = LogHandler()
+    bot = BotActions(tokens, logger)
     twitter_data = bot.myself_data()
-    connection_pass = config['DEFAULT']['mongo_password']
-    db = DbConnection(connection_pass, {'tag': twitter_data.screen_name})
-    db.bot_overview()
-    db.update_account_info(twitter_data)
-
-    tweet = TwitterItem("12", "algo", "hoje", "sou eu")
-    print(tweet.__dict__)
-    # database_access.server_status()
-
     # currently working actions of the actions model
-    # actions.tweet("hello again :D")
+    print("Getting the tweet done!")
+    bot.tweet("funciona logo porra")
+
+    print("Logging....")
+    logger.establish_connection(connection_pass, {'tag': bot_tag})
+    # logger.server_status()
+    logger.bot_overview()
+    logger.update_account_info(twitter_data)
+
+    logger.tweets_logs()
+    print("All gooood!")
+
+
     # actions.follow(1159210901825904640)
     # actions.unfollow('joaoluizpedrosa')
     # actions.reply('actions: reply test', 1391920122265231364)

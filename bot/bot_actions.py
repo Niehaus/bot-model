@@ -13,16 +13,18 @@ import tweepy
 
 
 class BotActions:
-    def __init__(self, tokens):
+    def __init__(self, tokens, logger):
         self.__bearer_token = tokens["bearer_token"]
         self.__access_token = tokens["access_token"]
         self.__access_token_secret = tokens["access_token_secret"]
         self.__api_key = tokens["api_key"]
         self.__api_secret_key = tokens["api_secret_key"]
-        self.api = tweepy.API(self.authenticate())
+        self.api = tweepy.API(self.authenticate(), wait_on_rate_limit=True,
+                              timeout=120,wait_on_rate_limit_notify=True)
 
         self.bot_name = tokens["bot_name"]
-        self.dm = self.DmHandler(self.api, self.myself_data())
+        self.logger = logger
+        # self.dm = self.DmHandler(self.api, self.myself_data())
         self.identity = "brainnn"
 
     def authenticate(self):
@@ -37,10 +39,9 @@ class BotActions:
 
     def tweet(self, msg):
         """ Tweet próprio na timeline """
-        self.api.update_status(
-            f"{msg}\n"
-            f"- Tweet from {self.bot_name}"
-        )
+        content = f"{msg}\n- Tweet from {self.bot_name}"
+        self.api.update_status(content)
+        self.logger.acumulate_tweets.append({"content": content})
 
     def reply(self, msg, tweet_id):
         """ Responde a um tweet """
