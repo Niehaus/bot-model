@@ -71,7 +71,6 @@ def pre_process_data(df, column, language='portuguese'):
 	for tweet in df.itertuples():
 		print("===\n",tweet.full_text)
 	"""
-	
 	# removal of html tags
 	df[column] = list(map(pp.strip_tags, df[column]))
 
@@ -320,7 +319,7 @@ if __name__ == '__main__':
 
 	df = pd.read_csv(input_name, sep=',')
 	
-	df = df.head(50)
+	df = df.head(250)
 
 	df = pre_process_data(df, 'full_text')
 
@@ -335,7 +334,8 @@ if __name__ == '__main__':
 		words = tweet.split()	
 		for i, word in enumerate(words):
 			if(word in stop_words):
-				before_stop_word.append(' '.join(words[last_i + 1:i + 1]))
+				phrase = ' '.join(words[last_i + 1:i + 1])
+				if(not phrase in before_stop_word): before_stop_word.append(phrase)
 				last_i = i
 				
 				half_tweet = round(len(words) / 2)
@@ -348,9 +348,13 @@ if __name__ == '__main__':
 				if(not begin_phrase in after_stop_word): after_stop_word.append(begin_phrase)
 			
 	
-	print('antes', before_stop_word)
-	print()
+	#print('antes', before_stop_word)
+	#print()
 	print('depois', after_stop_word)
+
+	print(before_stop_word[14] + after_stop_word[32])
+
+
 
 	#tfidf_matrix, tfidf_features_names = generate_textual_representation(df, 'full_text')
 	
